@@ -23,6 +23,7 @@ The following section needs to be added according to your setup. Each entry in e
 
     CAMERA_NAMES=("cam1" "cam2")
     CAMERA_DEVICES=("/dev/video0" "/dev/video2")
+    CAMERA_FOCUS=("40")
     CAMERA_RESOLUTIONS=("1920x1080" "1920x1080")
     TOKENS=("XXXXX" "XXXXX")
 
@@ -47,6 +48,9 @@ Source: https://askubuntu.com/questions/348838/how-to-check-available-webcams-fr
 
 #### CAMERA_RESOLUTIONS
 Enter resolutions appropriate for your cameras.
+
+#### CAMERA_FOCUS
+Enter a focus value between 0-255 for a manual focus
 
 #### TOKENS
 Go to the camera section of your printer in prusa connect and click "Add new another camera"
