@@ -1,13 +1,13 @@
 # webcam_to_prusa_connect
-This script for linux with systemd uses ffmpeg and curl to send pictures from webcams to prusa connect. To preserve the sd card when running this on a raspberry pi, it doesn't save the image to the file system but sends it directly to prusa connect.
+This script for linux with systemd uses curl to send pictures from webcams to prusa connect. It pulls each snapshot from [go2rtc](https://github.com/AlexxIT/go2rtc), which owns the cameras, so the same camera can also be streamed live (for example to Home Assistant). Frames live only in a RAM-backed temp directory, never on the SD card.
 It is tested for Raspberry Pi OS Lite (Trixie).
 
 ## Usage
 
 ### Install needed tools
-If not present install git for cloning this repository, ffmpeg for getting the pictures from the webcams
+If not present install git for cloning this repository. Snapshots come from a go2rtc instance that serves each camera's latest frame at `/api/frame.jpeg`; set that up first.
 
-    sudo apt install ffmpeg git
+    sudo apt install git curl
 
 ### Clone the repository
 
@@ -22,35 +22,14 @@ To edit the script you can use nano and close with ctrl + x and save your change
 The following section needs to be added according to your setup. Each entry in each line corrosponds to one camera at the position in the entry. You can use one or multiple cameras.
 
     CAMERA_NAMES=("cam1" "cam2")
-    CAMERA_DEVICES=("/dev/video0" "/dev/video2")
-    CAMERA_FOCUS=("40")
-    CAMERA_RESOLUTIONS=("1920x1080" "1920x1080")
+    CAMERA_SNAPSHOT_URLS=("http://127.0.0.1:1984/api/frame.jpeg?src=cam1" "http://127.0.0.1:1984/api/frame.jpeg?src=cam2")
     TOKENS=("XXXXX" "XXXXX")
 
 #### CAMERA_NAMES
 You can choose the names freely - they appear in the log of the script.
 
-#### CAMERA_DEVICES
-In short:
-
-    v4l2-ctl --list-devices
-
-Th output should be something like this:
-
-    Full HD webcam: Full HD webcam (usb-0000:01:00.0-1.1):
-        /dev/video0
-        /dev/video1
-        /dev/media4
-
-Take the first "/dev/*" entry for each camera.
-
-Source: https://askubuntu.com/questions/348838/how-to-check-available-webcams-from-the-command-line
-
-#### CAMERA_RESOLUTIONS
-Enter resolutions appropriate for your cameras.
-
-#### CAMERA_FOCUS
-Enter a focus value between 0-255 for a manual focus
+#### CAMERA_SNAPSHOT_URLS
+The go2rtc snapshot URL for each camera. Device, resolution and focus are configured in go2rtc, not here. Keep the camera's go2rtc stream open with go2rtc's `preload:` setting: a camera opened just for one snapshot returns a poorly exposed, wrongly framed first frame.
 
 #### TOKENS
 Go to the camera section of your printer in prusa connect and click "Add new another camera"
