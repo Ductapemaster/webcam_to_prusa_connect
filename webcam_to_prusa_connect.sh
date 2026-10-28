@@ -1,5 +1,5 @@
 #!/bin/bash
-PRUSA_URL=https://webcam.connect.prusa3d.com/c/snapshot
+PRUSA_URL=https://connect.prusa3d.com/c/snapshot
 FRAME_CAPTURE_DELAY=${FRAME_CAPTURE_DELAY:-0.5}
 CAMERA_CYCLE_DELAY=${CAMERA_CYCLE_DELAY:-9}
 CONNECTION_TIMEOUT_DELAY=${CONNECTION_TIMEOUT_DELAY:-5}
